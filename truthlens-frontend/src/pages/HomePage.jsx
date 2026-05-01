@@ -1,35 +1,63 @@
 import { motion } from 'framer-motion';
-import { Search, Shield, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star } from 'lucide-react';
 import InputForm from '../components/InputForm';
 
 const FEATURES = [
   {
-    icon: Search,
+    icon: Layers,
     iconBg: 'bg-indigo-100',
     iconColor: 'text-indigo-600',
-    label: 'AI-Powered Analysis',
-    desc: 'Advanced AI scans and analyzes claims using reliable sources.',
+    label: 'Multi-Layer AI Analysis',
+    desc: 'Runs multiple NLP pipelines simultaneously — bias, emotion, narrative, rhetoric, propaganda — to deeply analyze content.',
   },
   {
-    icon: Shield,
+    icon: ShieldCheck,
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
-    label: 'Unbiased & Transparent',
-    desc: 'We prioritize accuracy and show our sources, so you can trust the results.',
+    label: 'Real vs Fake Prediction',
+    desc: 'Provides a clear REAL / FAKE verdict with probability and confidence score.',
+  },
+  {
+    icon: Eye,
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+    label: 'Explainable AI',
+    desc: 'Highlights which words influenced the decision, making the model transparent and interpretable.',
   },
   {
     icon: BarChart2,
     iconBg: 'bg-violet-100',
     iconColor: 'text-violet-600',
-    label: 'Confidence Scoring',
-    desc: 'Get a clear confidence score and assessment for every analysis.',
+    label: 'Bias Detection',
+    desc: 'Identifies political and media bias, including left/right leaning and biased language.',
   },
   {
-    icon: FileText,
+    icon: Flame,
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-500',
+    label: 'Emotion Analysis',
+    desc: 'Detects emotional tone such as fear, anger, or neutrality to uncover manipulation patterns.',
+  },
+  {
+    icon: Megaphone,
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-500',
+    label: 'Propaganda Detection',
+    desc: 'Detects tactics like fear appeals, scapegoating, and polarization used in misleading content.',
+  },
+  {
+    icon: BookOpen,
+    iconBg: 'bg-teal-100',
+    iconColor: 'text-teal-600',
+    label: 'Narrative Intelligence',
+    desc: 'Analyzes storytelling patterns like hero, villain, victim roles and conflict intensity.',
+  },
+  {
+    icon: Star,
     iconBg: 'bg-amber-100',
     iconColor: 'text-amber-600',
-    label: 'Source Transparency',
-    desc: 'See the evidence behind the analysis with full source attribution.',
+    label: 'Aggregated Credibility Score',
+    desc: 'Combines all signals into a single credibility and manipulation risk score.',
   },
 ];
 
@@ -160,13 +188,13 @@ export default function HomePage({ onSubmit, loading, health, error }) {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURES.map(({ icon: Icon, iconBg, iconColor, label, desc }) => (
+            {FEATURES.map(({ icon: Icon, iconBg, iconColor, label, desc }, i) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
                 className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100"
               >
                 <div className={`w-14 h-14 ${iconBg} rounded-full flex items-center justify-center mx-auto mb-4`}>
