@@ -7,7 +7,6 @@ const NAV_LINKS = [
   { label: 'How It Works',href: '#how-it-works',anchor: true },
   { label: 'About',       href: '/about',        internal: true },
   { label: 'Analysis',    href: '#analyze',      anchor: true },
-  { label: 'Dashboard',   href: '/results',      internal: true },
 ];
 
 export default function Header({ health }) {
