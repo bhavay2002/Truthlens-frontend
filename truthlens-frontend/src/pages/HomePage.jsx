@@ -189,9 +189,6 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       <section id="features" className="bg-[#0b0f1e] py-20 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-violet-600/20 text-violet-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-violet-500/30">
-              ✦ FEATURES
-            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white">Smart Analysis. Clear Insights.</h2>
             <p className="mt-3 text-gray-400 max-w-xl mx-auto">
               TruthLens uses advanced AI and trusted sources to deliver factual, transparent, and easy-to-understand analysis.
@@ -223,9 +220,6 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       <section id="how-it-works" className="bg-[#0b0f1e] py-20 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 bg-blue-600/20 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-blue-500/30">
-              <span>🚀</span> HOW IT WORKS
-            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white">6 Steps to the Truth</h2>
             <p className="mt-3 text-gray-400 max-w-xl mx-auto">
               From input to insight — here's exactly how TruthLens analyses your content in real time.
