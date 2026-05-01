@@ -2,12 +2,12 @@ import { Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const NAV_LINKS = [
-  { label: 'Home', href: '/', internal: true },
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Features', href: '#features' },
-  { label: 'About', href: '/about', internal: true },
-  { label: 'Blog', href: '#blog' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home',         href: '/',            internal: true },
+  { label: 'Features',    href: '#features',    anchor: true },
+  { label: 'How It Works',href: '#how-it-works',anchor: true },
+  { label: 'About',       href: '/about',        internal: true },
+  { label: 'Analysis',    href: '#analyze',      anchor: true },
+  { label: 'Dashboard',   href: '/results',      internal: true },
 ];
 
 export default function Header({ health }) {
@@ -26,9 +26,16 @@ export default function Header({ health }) {
           </Link>
 
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-gray-600">
-            {NAV_LINKS.map(({ label, href, internal }) => {
+            {NAV_LINKS.map(({ label, href, internal, anchor }) => {
               const isActive = internal && pathname === href;
-              return internal ? (
+              if (anchor) {
+                return (
+                  <a key={label} href={href} className="hover:text-gray-900 transition-colors">
+                    {label}
+                  </a>
+                );
+              }
+              return (
                 <Link
                   key={label}
                   to={href}
@@ -36,10 +43,6 @@ export default function Header({ health }) {
                 >
                   {label}
                 </Link>
-              ) : (
-                <a key={label} href={href} className="hover:text-gray-900 transition-colors">
-                  {label}
-                </a>
               );
             })}
           </nav>
@@ -51,21 +54,6 @@ export default function Header({ health }) {
                 {isHealthy ? 'Live' : 'Offline'}
               </span>
             )}
-            <button className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors px-3 py-2">
-              Log In
-            </button>
-            <Link
-              to="/"
-              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
-              onClick={(e) => {
-                if (pathname === '/') {
-                  e.preventDefault();
-                  document.getElementById('analyze')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            >
-              Get Started
-            </Link>
           </div>
         </div>
       </div>
