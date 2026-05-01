@@ -32,11 +32,15 @@ function AppInner() {
 
   const handleViewDashboard = () => {
     navigate('/results');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleReset = () => {
     reset();
     navigate('/');
+    setTimeout(() => {
+      document.getElementById('analyze')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const networkError = errorType === 'network' ? error : null;
