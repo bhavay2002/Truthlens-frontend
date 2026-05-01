@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, AlertCircle, RefreshCw, Zap } from 'lucide-react';
 import VerdictCard from '../components/VerdictCard';
 import SkeletonLoader from '../components/SkeletonLoader';
 
@@ -12,8 +12,9 @@ const PropagandaPanel = lazy(() => import('../components/panels/PropagandaPanel'
 const ExplainabilityPanel = lazy(() => import('../components/panels/ExplainabilityPanel'));
 const GraphPanel = lazy(() => import('../components/panels/GraphPanel'));
 const AggregationPanel = lazy(() => import('../components/panels/AggregationPanel'));
+const ReportPanel = lazy(() => import('../components/panels/ReportPanel'));
 
-const TABS = [
+const ANALYSIS_TABS = [
   { id: 'bias', label: 'Bias' },
   { id: 'emotion', label: 'Emotion' },
   { id: 'narrative', label: 'Narrative' },
@@ -24,7 +25,11 @@ const TABS = [
   { id: 'aggregation', label: 'Aggregation' },
 ];
 
-export default function ResultsPage({ analyzeResult, explainResult, loading, onReset }) {
+export default function ResultsPage({
+  analyzeResult, explainResult, reportResult,
+  loading, isHeuristic, mode, error,
+  onReset, onRetry,
+}) {
   const [activeTab, setActiveTab] = useState('bias');
 
   if (loading) {
@@ -45,6 +50,25 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
     );
   }
 
+  if (error && !analyzeResult) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-5">
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-8 space-y-4">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto" />
+          <h2 className="text-lg font-bold text-red-700">Something went wrong</h2>
+          <p className="text-sm text-red-600">{error}</p>
+          <button
+            onClick={onRetry}
+            className="flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold text-sm transition-colors mx-auto"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!analyzeResult) return null;
 
   const prediction = analyzeResult.prediction ?? explainResult?.prediction?.prediction ?? 'UNKNOWN';
@@ -55,7 +79,22 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
   const verdictResult = { prediction, fake_probability, confidence };
   const explainability = explainResult?.explainability ?? null;
 
+  const isReportMode = mode === 'report';
+  const tabs = isReportMode
+    ? [{ id: 'report', label: 'Report' }, ...ANALYSIS_TABS]
+    : ANALYSIS_TABS;
+
+  const validTab = tabs.find((t) => t.id === activeTab) ? activeTab : tabs[0].id;
+
   const renderTab = () => {
+    if (validTab === 'report') {
+      return (
+        <Suspense fallback={<SkeletonLoader rows={5} />}>
+          <ReportPanel reportResult={reportResult} analyzeResult={analyzeResult} />
+        </Suspense>
+      );
+    }
+
     const panelProps = {
       bias: { bias: analyzeResult.bias },
       emotion: { emotion: analyzeResult.emotion },
@@ -81,8 +120,8 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
       aggregation: AggregationPanel,
     };
 
-    const Panel = components[activeTab];
-    const props = panelProps[activeTab];
+    const Panel = components[validTab];
+    const props = panelProps[validTab];
 
     return (
       <Suspense fallback={<SkeletonLoader rows={5} />}>
@@ -93,6 +132,39 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {isHeuristic && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3"
+        >
+          <Zap className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
+          <div className="text-sm text-yellow-800">
+            <strong>Heuristic mode</strong> — Running in heuristic mode. Predictions use lexicon scoring since the ML model is not fully trained.
+          </div>
+        </motion.div>
+      )}
+
+      {error && analyzeResult && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3"
+        >
+          <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+          <div className="text-sm text-red-700 flex-1">
+            <strong>Warning:</strong> {error}
+          </div>
+          <button
+            onClick={onRetry}
+            className="flex items-center gap-1.5 text-xs text-red-600 hover:text-red-800 font-medium border border-red-200 px-2.5 py-1 rounded-lg transition-colors"
+          >
+            <RefreshCw className="w-3 h-3" />
+            Retry
+          </button>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -113,12 +185,12 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
       >
         <div className="border-b border-gray-200 overflow-x-auto">
           <div className="flex min-w-max">
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap border-b-2 -mb-px ${
-                  activeTab === tab.id
+                  validTab === tab.id
                     ? 'border-blue-600 text-blue-600 bg-blue-50'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                 }`}
@@ -131,7 +203,7 @@ export default function ResultsPage({ analyzeResult, explainResult, loading, onR
 
         <div className="p-6">
           <motion.div
-            key={activeTab}
+            key={validTab}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}

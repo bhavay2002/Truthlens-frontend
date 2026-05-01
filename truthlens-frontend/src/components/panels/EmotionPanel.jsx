@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from 'recharts';
 
-const emotionColors = {
+const emotionTextColors = {
   anger: 'text-red-500',
   fear: 'text-orange-500',
   neutral: 'text-gray-500',
@@ -18,6 +18,24 @@ const emotionColors = {
   curiosity: 'text-violet-500',
   love: 'text-pink-500',
   gratitude: 'text-teal-500',
+};
+
+const CustomAngleTick = ({ x, y, payload, dominantEmotion }) => {
+  const isDominant = payload.value.toLowerCase() === (dominantEmotion ?? '').toLowerCase();
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fontSize={isDominant ? 12 : 11}
+      fontWeight={isDominant ? '700' : '400'}
+      fill={isDominant ? '#f59e0b' : '#6b7280'}
+    >
+      {payload.value}
+      {isDominant ? ' ★' : ''}
+    </text>
+  );
 };
 
 export default function EmotionPanel({ emotion }) {
@@ -34,16 +52,17 @@ export default function EmotionPanel({ emotion }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4 flex-wrap">
-        {dominant_emotion && (
-          <div className="bg-violet-50 border border-violet-200 rounded-xl p-4">
+      {dominant_emotion && (
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
             <div className="text-xs text-gray-500 mb-1">Dominant Emotion</div>
-            <div className={`text-xl font-bold capitalize ${emotionColors[dominant_emotion] ?? 'text-gray-700'}`}>
+            <div className={`text-xl font-bold capitalize ${emotionTextColors[dominant_emotion] ?? 'text-gray-700'}`}>
               {dominant_emotion}
             </div>
           </div>
-        )}
-      </div>
+          <p className="text-xs text-gray-400">★ highlighted on chart</p>
+        </div>
+      )}
 
       {radarData.length > 0 && (
         <div>
@@ -51,7 +70,12 @@ export default function EmotionPanel({ emotion }) {
           <ResponsiveContainer width="100%" height={300}>
             <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
               <PolarGrid />
-              <PolarAngleAxis dataKey="emotion" tick={{ fontSize: 11 }} />
+              <PolarAngleAxis
+                dataKey="emotion"
+                tick={(props) => (
+                  <CustomAngleTick {...props} dominantEmotion={dominant_emotion} />
+                )}
+              />
               <Tooltip formatter={(v) => v.toFixed(3)} />
               <Radar
                 name="Emotion"
@@ -66,12 +90,24 @@ export default function EmotionPanel({ emotion }) {
       )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {Object.entries(scores).map(([key, val]) => (
-          <div key={key} className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
-            <span className={`text-xs font-medium capitalize ${emotionColors[key] ?? 'text-gray-600'}`}>{key}</span>
-            <span className="text-xs font-mono text-gray-700">{(val ?? 0).toFixed(3)}</span>
-          </div>
-        ))}
+        {Object.entries(scores).map(([key, val]) => {
+          const isDominant = key === dominant_emotion;
+          return (
+            <div
+              key={key}
+              className={`flex items-center justify-between rounded-lg px-3 py-2 border ${
+                isDominant
+                  ? 'bg-amber-50 border-amber-300'
+                  : 'bg-gray-50 border-gray-100'
+              }`}
+            >
+              <span className={`text-xs font-medium capitalize ${isDominant ? 'text-amber-700 font-bold' : emotionTextColors[key] ?? 'text-gray-600'}`}>
+                {key}{isDominant ? ' ★' : ''}
+              </span>
+              <span className="text-xs font-mono text-gray-700">{(val ?? 0).toFixed(3)}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

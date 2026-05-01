@@ -29,15 +29,17 @@ truthlens-frontend/
 │   │   ├── InputForm.jsx       # Text input + mode toggle + example buttons
 │   │   ├── VerdictCard.jsx     # REAL/FAKE verdict with animated progress bars
 │   │   ├── SkeletonLoader.jsx
+│   │   ├── Toast.jsx           # Network error toast (bottom-right, auto-dismiss)
 │   │   └── panels/
 │   │       ├── BiasPanel.jsx           # Sentence heatmap + biased tokens
-│   │       ├── EmotionPanel.jsx        # Radar chart + emotion scores
+│   │       ├── EmotionPanel.jsx        # Radar chart (dominant highlighted) + scores
 │   │       ├── NarrativePanel.jsx      # Donut chart (hero/villain/victim)
 │   │       ├── RhetoricPanel.jsx       # Framing radar + rhetoric metrics
 │   │       ├── PropagandaPanel.jsx     # Semicircle gauge meters (4 indicators)
-│   │       ├── ExplainabilityPanel.jsx # Token heatmap + LIME bar chart
+│   │       ├── ExplainabilityPanel.jsx # Token heatmap + LIME bar chart + quality ring
 │   │       ├── GraphPanel.jsx          # Graph metrics (nodes, edges, density)
-│   │       └── AggregationPanel.jsx    # Module weights pie + risk badges
+│   │       ├── AggregationPanel.jsx    # Module weights pie + risk badges
+│   │       └── ReportPanel.jsx         # Article summary report (Report mode)
 │   ├── App.jsx                 # Router + app shell
 │   └── main.jsx                # Entry point
 ├── vite.config.js              # Vite config (host: 0.0.0.0, port: 5000)
@@ -53,13 +55,29 @@ truthlens-frontend/
 - **Build**: `cd truthlens-frontend && npm run build`
 
 ## Features
-- Real-time character counter with validation
+- Real-time character counter with validation (soft warn at 4,000, hard limit at 5,000)
+- URL detection warning in input
 - Example prefill buttons (credible, fake, political)
-- 3 analysis modes: Quick, Deep (with /explain), Report
-- Animated verdict card (REAL/FAKE/Borderline)
+- 3 analysis modes: Quick (/analyze), Deep (/analyze + /explain), Report (/analyze + /report)
+- Animated verdict card (REAL/FAKE/Borderline) with fake probability, confidence, manipulation risk, credibility bars
 - 8 analysis tabs: Bias, Emotion, Narrative, Rhetoric, Propaganda, Explainability, Graph, Aggregation
+- Report tab (shown in Report mode): article summary, bias/emotion/narrative sections
 - Session storage caching for repeated queries
 - Server health indicator in header
-- Heuristic mode banner when ML model not trained
+- Heuristic mode banner on results page when server returns 503 with fallback data
+- Toast notification for network errors ("Cannot reach server")
+- Error card with retry button for 500 server errors
 - Lazy-loaded chart panels for performance
+- Dominant emotion axis highlighted in radar chart (amber/bold)
+- Token importance heatmap with LIME/Aggregated/Emotion toggle
+- Propaganda gauges: 4 semicircular meters (green→yellow→red)
+- Faithfulness badge and latency table in explainability panel
 - Responsive layout
+
+## Error Handling
+| Type | UI |
+|------|-----|
+| Network error | Toast notification (bottom-right, auto-dismiss 5s) |
+| 503 / heuristic fallback | Yellow info banner on results page |
+| 500 server error | Red error card with "Try Again" button |
+| 422 / validation | Inline form error |
