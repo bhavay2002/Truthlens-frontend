@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star, Type, Cpu, BrainCircuit, Lightbulb, GitMerge, Trophy } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star, Type, Cpu, BrainCircuit, Lightbulb, GitMerge, Trophy, TrendingUp, Zap, Shield } from 'lucide-react';
 import InputForm from '../components/InputForm';
 
 const FEATURES = [
@@ -75,7 +75,13 @@ const KEY_FINDINGS = [
   { icon: FileText, color: 'text-blue-400', text: 'Sources: EPA, ICCT, BloombergNEF, peer-reviewed studies' },
 ];
 
-export default function HomePage({ onSubmit, loading, health, error }) {
+function predictionColor(p) {
+  if (p === 'REAL') return { badge: 'bg-emerald-700 text-white', bar: 'bg-emerald-500', label: 'Real' };
+  if (p === 'FAKE') return { badge: 'bg-red-700 text-white', bar: 'bg-red-500', label: 'Fake' };
+  return { badge: 'bg-yellow-600 text-white', bar: 'bg-yellow-400', label: 'Uncertain' };
+}
+
+export default function HomePage({ onSubmit, loading, health, error, analyzeResult, onViewDashboard }) {
   const isHeuristic = health && health.model_files_complete === false;
 
   const scrollToAnalyze = () => {
@@ -311,44 +317,154 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── Analyze ──────────────────────────────────────────────────────── */}
-      <section id="analyze" className="bg-white py-20 scroll-mt-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="analyze" className="bg-[#0b0f1e] py-16 scroll-mt-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Analyze a Claim</h2>
-            <p className="mt-3 text-gray-500">
-              Paste any news article, claim, or statement below and let TruthLens analyze it for you.
+            <h2 className="text-3xl font-bold text-white">Verify a Claim</h2>
+            <p className="mt-2 text-gray-400 text-sm">
+              Paste any news article or claim and let TruthLens analyze it instantly.
             </p>
           </div>
-
-          {isHeuristic && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-start gap-3"
-            >
-              <AlertCircle className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
-              <div className="text-sm text-yellow-800">
-                <strong>Heuristic mode</strong> — Running in heuristic mode. Predictions use lexicon scoring since the ML model is not trained yet.
-              </div>
-            </motion.div>
-          )}
 
           {error && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3"
+              className="mb-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3"
             >
-              <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-              <div className="text-sm text-red-700">
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+              <div className="text-sm text-red-300">
                 <strong>Error:</strong> {error}
               </div>
             </motion.div>
           )}
 
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <div className="bg-[#131929] border border-white/10 rounded-2xl p-5">
             <InputForm onSubmit={onSubmit} loading={loading} />
           </div>
+
+          {/* ── Inline Result Card ──────────────────────────────────────── */}
+          <AnimatePresence>
+            {analyzeResult && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="mt-5 bg-[#131929] border border-white/10 rounded-2xl overflow-hidden"
+              >
+                {/* Header */}
+                <div className="flex items-center gap-2 px-5 pt-5 pb-3 border-b border-white/10">
+                  <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
+                    <Search className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="text-white font-semibold text-sm">TruthLens Analysis</span>
+                </div>
+
+                <div className="p-5 space-y-4">
+                  {/* Prediction row */}
+                  {(() => {
+                    const { badge, bar, label } = predictionColor(analyzeResult.prediction);
+                    const pct = Math.round((analyzeResult.confidence ?? 0) * 100);
+                    const confLabel = pct >= 75 ? 'High' : pct >= 50 ? 'Medium' : 'Low';
+                    const confColor = pct >= 75 ? 'text-emerald-400' : pct >= 50 ? 'text-yellow-400' : 'text-red-400';
+                    return (
+                      <>
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-white font-semibold text-sm leading-snug flex-1 line-clamp-2">
+                            Assessment result for your text
+                          </p>
+                          <div className={`shrink-0 ${badge} rounded-lg px-3 py-2 text-center`}>
+                            <div className="text-xs opacity-75 mb-0.5">Assessment</div>
+                            <div className="text-sm font-bold leading-tight">{label}</div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between items-center mb-1.5">
+                            <span className="text-xs text-gray-400">
+                              Confidence <span className={`font-medium ${confColor}`}>{confLabel}</span>
+                            </span>
+                            <span className="text-xs text-gray-300 font-medium">{pct}%</span>
+                          </div>
+                          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${pct}%` }}
+                              transition={{ duration: 0.8 }}
+                              className={`h-full ${bar} rounded-full`}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
+
+                  {/* Key Findings */}
+                  <div>
+                    <p className="text-xs text-gray-400 font-semibold mb-3 uppercase tracking-wide">Key Findings</p>
+                    <div className="space-y-2.5">
+                      {/* Bias */}
+                      {analyzeResult.bias && (
+                        <div className="flex items-start gap-2.5">
+                          <BarChart2 className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
+                          <p className="text-xs text-gray-300 leading-relaxed">
+                            Bias: <span className="text-white font-medium capitalize">{analyzeResult.bias.media_bias ?? '—'}</span>
+                            {analyzeResult.bias.bias_score != null && (
+                              <span className="text-gray-400"> · Score {Math.round(analyzeResult.bias.bias_score * 100)}%</span>
+                            )}
+                          </p>
+                        </div>
+                      )}
+                      {/* Emotion */}
+                      {analyzeResult.emotion && (
+                        <div className="flex items-start gap-2.5">
+                          <Flame className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
+                          <p className="text-xs text-gray-300 leading-relaxed">
+                            Dominant emotion: <span className="text-white font-medium capitalize">{analyzeResult.emotion.dominant_emotion ?? '—'}</span>
+                          </p>
+                        </div>
+                      )}
+                      {/* Propaganda */}
+                      {analyzeResult.propaganda_analysis && (
+                        <div className="flex items-start gap-2.5">
+                          <Shield className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                          <p className="text-xs text-gray-300 leading-relaxed">
+                            Propaganda intensity: <span className="text-white font-medium">
+                              {Math.round((analyzeResult.propaganda_analysis.propaganda_intensity ?? 0) * 100)}%
+                            </span>
+                            {analyzeResult.propaganda_analysis.polarization_score != null && (
+                              <span className="text-gray-400"> · Polarization {Math.round(analyzeResult.propaganda_analysis.polarization_score * 100)}%</span>
+                            )}
+                          </p>
+                        </div>
+                      )}
+                      {/* Narrative */}
+                      {analyzeResult.narrative?.conflict && (
+                        <div className="flex items-start gap-2.5">
+                          <Zap className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+                          <p className="text-xs text-gray-300 leading-relaxed">
+                            Narrative conflict: <span className="text-white font-medium capitalize">{analyzeResult.narrative.conflict.conflict_type ?? '—'}</span>
+                            {analyzeResult.narrative.propagation?.virality_score != null && (
+                              <span className="text-gray-400"> · Virality {Math.round(analyzeResult.narrative.propagation.virality_score * 100)}%</span>
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* View Full Analysis */}
+                  <button
+                    onClick={onViewDashboard}
+                    className="w-full flex items-center justify-between text-blue-400 hover:text-blue-300 text-xs font-medium border border-white/10 rounded-lg px-4 py-2.5 transition-colors hover:border-white/20"
+                  >
+                    <span>View Full Analysis Dashboard</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 

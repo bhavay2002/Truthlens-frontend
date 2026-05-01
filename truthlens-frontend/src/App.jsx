@@ -25,19 +25,13 @@ function AppInner() {
   const handleSubmit = async (text, selectedMode) => {
     const result = await run(text, selectedMode);
     if (!result) return;
-    if (!result.ok) {
-      if (result.errorType === 'network') {
-        setToast('Cannot reach server. Please check your connection.');
-      } else {
-        navigate('/results');
-      }
-    } else {
-      navigate('/results');
+    if (!result.ok && result.errorType === 'network') {
+      setToast('Cannot reach server. Please check your connection.');
     }
   };
 
-  const handleRetry = () => {
-    navigate('/');
+  const handleViewDashboard = () => {
+    navigate('/results');
   };
 
   const handleReset = () => {
@@ -64,7 +58,8 @@ function AppInner() {
                 health={health}
                 error={serverError ?? validationError ?? generalError}
                 networkError={networkError}
-                onRetry={handleRetry}
+                analyzeResult={analyzeResult}
+                onViewDashboard={handleViewDashboard}
               />
             }
           />
@@ -81,7 +76,7 @@ function AppInner() {
                 mode={mode}
                 error={serverError}
                 onReset={handleReset}
-                onRetry={handleRetry}
+                onRetry={() => navigate('/')}
               />
             }
           />
