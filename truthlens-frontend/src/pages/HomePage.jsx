@@ -186,7 +186,7 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── Features ─────────────────────────────────────────────────────── */}
-      <section id="features" className="bg-[#0b0f1e] py-20">
+      <section id="features" className="bg-[#0b0f1e] py-20 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-violet-600/20 text-violet-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-violet-500/30">
@@ -220,7 +220,7 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── How It Works ─────────────────────────────────────────────────── */}
-      <section id="how-it-works" className="bg-[#0b0f1e] py-20">
+      <section id="how-it-works" className="bg-[#0b0f1e] py-20 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 bg-blue-600/20 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-blue-500/30">
@@ -317,7 +317,7 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── Analyze ──────────────────────────────────────────────────────── */}
-      <section id="analyze" className="bg-white py-20">
+      <section id="analyze" className="bg-white py-20 scroll-mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Analyze a Claim</h2>
