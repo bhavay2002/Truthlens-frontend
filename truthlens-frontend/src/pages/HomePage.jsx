@@ -5,57 +5,65 @@ import InputForm from '../components/InputForm';
 const FEATURES = [
   {
     icon: Layers,
-    iconBg: 'bg-indigo-100',
-    iconColor: 'text-indigo-600',
+    iconBg: 'bg-indigo-500/10',
+    iconColor: 'text-indigo-400',
+    border: 'border-indigo-500/20',
     label: 'Multi-Layer AI Analysis',
     desc: 'Runs multiple NLP pipelines simultaneously — bias, emotion, narrative, rhetoric, propaganda — to deeply analyze content.',
   },
   {
     icon: ShieldCheck,
-    iconBg: 'bg-emerald-100',
-    iconColor: 'text-emerald-600',
+    iconBg: 'bg-emerald-500/10',
+    iconColor: 'text-emerald-400',
+    border: 'border-emerald-500/20',
     label: 'Real vs Fake Prediction',
     desc: 'Provides a clear REAL / FAKE verdict with probability and confidence score.',
   },
   {
     icon: Eye,
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
+    iconBg: 'bg-blue-500/10',
+    iconColor: 'text-blue-400',
+    border: 'border-blue-500/20',
     label: 'Explainable AI',
     desc: 'Highlights which words influenced the decision, making the model transparent and interpretable.',
   },
   {
     icon: BarChart2,
-    iconBg: 'bg-violet-100',
-    iconColor: 'text-violet-600',
+    iconBg: 'bg-violet-500/10',
+    iconColor: 'text-violet-400',
+    border: 'border-violet-500/20',
     label: 'Bias Detection',
     desc: 'Identifies political and media bias, including left/right leaning and biased language.',
   },
   {
     icon: Flame,
-    iconBg: 'bg-orange-100',
-    iconColor: 'text-orange-500',
+    iconBg: 'bg-orange-500/10',
+    iconColor: 'text-orange-400',
+    border: 'border-orange-500/20',
     label: 'Emotion Analysis',
     desc: 'Detects emotional tone such as fear, anger, or neutrality to uncover manipulation patterns.',
   },
   {
     icon: Megaphone,
-    iconBg: 'bg-red-100',
-    iconColor: 'text-red-500',
+    iconBg: 'bg-red-500/10',
+    iconColor: 'text-red-400',
+    border: 'border-red-500/20',
     label: 'Propaganda Detection',
     desc: 'Detects tactics like fear appeals, scapegoating, and polarization used in misleading content.',
   },
   {
     icon: BookOpen,
-    iconBg: 'bg-teal-100',
-    iconColor: 'text-teal-600',
+    iconBg: 'bg-teal-500/10',
+    iconColor: 'text-teal-400',
+    border: 'border-teal-500/20',
     label: 'Narrative Intelligence',
     desc: 'Analyzes storytelling patterns like hero, villain, victim roles and conflict intensity.',
   },
   {
     icon: Star,
-    iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
+    iconBg: 'bg-amber-500/10',
+    iconColor: 'text-amber-400',
+    border: 'border-amber-500/20',
     label: 'Aggregated Credibility Score',
     desc: 'Combines all signals into a single credibility and manipulation risk score.',
   },
@@ -178,30 +186,33 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── Features ─────────────────────────────────────────────────────── */}
-      <section id="features" className="bg-gray-50 py-20">
+      <section id="features" className="bg-[#0b0f1e] py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Smart Analysis. Clear Insights.</h2>
-            <p className="mt-3 text-gray-500 max-w-xl mx-auto">
+            <div className="inline-flex items-center gap-2 bg-violet-600/20 text-violet-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-violet-500/30">
+              ✦ FEATURES
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">Smart Analysis. Clear Insights.</h2>
+            <p className="mt-3 text-gray-400 max-w-xl mx-auto">
               TruthLens uses advanced AI and trusted sources to deliver factual, transparent, and easy-to-understand analysis.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURES.map(({ icon: Icon, iconBg, iconColor, label, desc }, i) => (
+            {FEATURES.map(({ icon: Icon, iconBg, iconColor, border, label, desc }, i) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100"
+                className={`bg-[#131929] rounded-2xl p-6 text-center border ${border}`}
               >
-                <div className={`w-14 h-14 ${iconBg} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                <div className={`w-14 h-14 ${iconBg} rounded-xl flex items-center justify-center mx-auto mb-4`}>
                   <Icon className={`w-6 h-6 ${iconColor}`} />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2 text-sm">{label}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="font-semibold text-white mb-2 text-sm">{label}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </div>
