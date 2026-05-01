@@ -50,7 +50,7 @@ function AppInner() {
   const generalError = !['network', 'server', 'validation'].includes(errorType) ? error : null;
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-white">
       <Header health={health} />
       <main className="flex-1">
         <Routes>
