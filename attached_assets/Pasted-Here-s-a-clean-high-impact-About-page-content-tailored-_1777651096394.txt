@@ -1,0 +1,111 @@
+Here’s a **clean, high-impact About page content** tailored for your TruthLens project—clear, professional, and strong for demo.
+
+---
+
+# 🚀 ABOUT PAGE CONTENT (USE THIS)
+
+## 🔹 1. Hero Section
+
+**Title:**
+**About TruthLens AI**
+
+**Tagline:**
+An advanced AI system for detecting misinformation with transparency and explainability.
+
+---
+
+## 🔹 2. What is TruthLens AI?
+
+TruthLens AI is a multi-layer misinformation detection system designed to analyze news articles and claims in depth. Instead of relying on simple classification, it evaluates multiple linguistic and contextual signals to determine credibility and manipulation risk.
+
+---
+
+## 🔹 3. Problem Statement
+
+In today’s digital world, misinformation spreads rapidly across social media and news platforms. Traditional fact-checking methods are slow, opaque, and often fail to explain *why* content is misleading.
+
+Users need a system that not only detects fake news but also explains the reasoning behind the decision.
+
+---
+
+## 🔹 4. Our Solution
+
+TruthLens AI addresses this problem by combining multiple AI techniques into a unified system that provides:
+
+* Accurate real vs fake prediction
+* Deep analysis of bias, emotion, and narrative
+* Detection of propaganda and manipulation patterns
+* Transparent explanations of model decisions
+
+---
+
+## 🔹 5. Key Capabilities
+
+* Multi-layer NLP analysis
+* Explainable AI using token-level insights
+* Bias and propaganda detection
+* Emotion and narrative understanding
+* Aggregated credibility scoring
+
+---
+
+## 🔹 6. How It’s Different
+
+Unlike traditional models that act as black boxes, TruthLens AI focuses on **interpretability and transparency**.
+
+It not only answers *“Is this fake?”* but also answers:
+
+👉 *“Why is this considered fake?”*
+
+---
+
+## 🔹 7. Use Cases
+
+* Journalists verifying news credibility
+* Students and researchers studying bias and media influence
+* General users validating suspicious claims
+* Educational demos of AI explainability
+
+---
+
+## 🔹 8. Technology Overview
+
+TruthLens AI integrates multiple NLP pipelines including:
+
+* Bias detection
+* Emotion analysis
+* Narrative role extraction
+* Propaganda detection
+* Explainability (LIME-based)
+* Aggregation engine for final scoring
+
+---
+
+## 🔹 9. Conclusion
+
+TruthLens AI aims to make misinformation detection more transparent, interpretable, and accessible by combining advanced AI techniques with intuitive visual explanations.
+
+---
+
+# 🎯 WHY THIS WORKS
+
+* Clear structure
+* Non-generic (matches your system)
+* Sounds like real product / research project
+* Easy for examiner to understand
+
+---
+
+# 🎨 UI TIP
+
+Display sections as:
+
+* Hero (top)
+* 2-column layout for content
+* Highlight “How It’s Different” in a card
+
+---
+
+If you want next:
+👉 I can convert this into **React About page UI**
+👉 or shorten it into **1-slide PPT for viva**

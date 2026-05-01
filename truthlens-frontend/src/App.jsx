@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Toast from './components/Toast';
 import HomePage from './pages/HomePage';
 import ResultsPage from './pages/ResultsPage';
+import AboutPage from './pages/AboutPage';
 
 function AppInner() {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ function AppInner() {
               />
             }
           />
+          <Route path="/about" element={<AboutPage />} />
           <Route
             path="/results"
             element={
