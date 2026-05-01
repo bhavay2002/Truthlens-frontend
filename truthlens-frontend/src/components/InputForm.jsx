@@ -46,7 +46,7 @@ export default function InputForm({ onSubmit, loading }) {
           value={text}
           onChange={(e) => { setText(e.target.value); setError(''); }}
           onBlur={() => { if (text) setError(validate(text)); }}
-          rows={4}
+          rows={7}
           placeholder="Verify News — paste a claim or article here..."
           className="w-full p-4 bg-[#1a2235] border border-white/10 rounded-xl resize-none text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
           maxLength={5200}

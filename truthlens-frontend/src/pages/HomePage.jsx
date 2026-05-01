@@ -349,11 +349,23 @@ export default function HomePage({ onSubmit, loading, health, error, analyzeResu
             </motion.div>
           )}
 
-          <div className="bg-[#131929] border border-white/10 rounded-2xl p-5">
-            <InputForm onSubmit={handleSubmit} loading={loading} />
-          </div>
+          {/* ── Form (hidden once result is shown) ──────────────────────── */}
+          <AnimatePresence>
+            {!(showResult && analyzeResult) && (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="bg-[#131929] border border-white/10 rounded-2xl p-5"
+              >
+                <InputForm onSubmit={handleSubmit} loading={loading} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* ── Inline Result Card ──────────────────────────────────────── */}
+          {/* ── Inline Result Card (replaces form) ──────────────────────── */}
           <AnimatePresence>
             {showResult && analyzeResult && (
               <motion.div
@@ -478,21 +490,26 @@ export default function HomePage({ onSubmit, loading, health, error, analyzeResu
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* ── New Analysis button ──────────────────────────────────────── */}
+          <AnimatePresence>
+            {showResult && analyzeResult && (
+              <motion.button
+                key="new-analysis"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setShowResult(false)}
+                className="w-full mt-3 py-2.5 border border-white/10 hover:border-white/20 text-gray-400 hover:text-white rounded-xl text-sm font-medium transition-colors"
+              >
+                + New Analysis
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* ── Footer strip ─────────────────────────────────────────────────── */}
-      <div id="about" className="bg-gray-50 border-t border-gray-100 py-8 text-center">
-        <p className="text-xs text-gray-400">Powered by Gemini + LIME · Multi-layer misinformation detection</p>
-        <p className="mt-1 text-xs text-gray-400">
-          API:{' '}
-          <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">POST /analyze</code>
-          {' · '}
-          <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">POST /explain</code>
-          {' · '}
-          <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">GET /health</code>
-        </p>
-      </div>
     </div>
   );
 }
