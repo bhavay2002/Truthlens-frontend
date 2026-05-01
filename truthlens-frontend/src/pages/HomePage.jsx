@@ -186,11 +186,11 @@ export default function HomePage({ onSubmit, loading, health, error }) {
       </section>
 
       {/* ── Features ─────────────────────────────────────────────────────── */}
-      <section id="features" className="bg-[#0b0f1e] py-20 scroll-mt-16">
+      <section id="features" className="bg-[#0b0f1e] pt-8 pb-16 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold text-white">Smart Analysis. Clear Insights.</h2>
-            <p className="mt-3 text-gray-400 max-w-xl mx-auto">
+            <p className="mt-2 text-gray-400 max-w-xl mx-auto">
               TruthLens uses advanced AI and trusted sources to deliver factual, transparent, and easy-to-understand analysis.
             </p>
           </div>
