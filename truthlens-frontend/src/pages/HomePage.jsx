@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star } from 'lucide-react';
+import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star, Type, Cpu, BrainCircuit, Lightbulb, GitMerge, Trophy } from 'lucide-react';
 import InputForm from '../components/InputForm';
 
 const FEATURES = [
@@ -104,7 +104,7 @@ export default function HomePage({ onSubmit, loading, health, error }) {
                   Analyze Now <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                   className="flex items-center gap-2 text-gray-300 hover:text-white font-medium text-sm transition-colors"
                 >
                   Learn How It Works <ArrowRight className="w-4 h-4" />
@@ -202,6 +202,103 @@ export default function HomePage({ onSubmit, loading, health, error }) {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2 text-sm">{label}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works ─────────────────────────────────────────────────── */}
+      <section id="how-it-works" className="bg-[#0b0f1e] py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 bg-blue-600/20 text-blue-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border border-blue-500/30">
+              <span>🚀</span> HOW IT WORKS
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">6 Steps to the Truth</h2>
+            <p className="mt-3 text-gray-400 max-w-xl mx-auto">
+              From input to insight — here's exactly how TruthLens analyses your content in real time.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                step: '01',
+                icon: Type,
+                color: 'text-blue-400',
+                bg: 'bg-blue-500/10',
+                border: 'border-blue-500/20',
+                title: 'Input Text',
+                desc: 'User enters a news article or claim for analysis.',
+              },
+              {
+                step: '02',
+                icon: Cpu,
+                color: 'text-violet-400',
+                bg: 'bg-violet-500/10',
+                border: 'border-violet-500/20',
+                title: 'AI Processing',
+                desc: 'The system sends the text to the backend for real-time processing.',
+              },
+              {
+                step: '03',
+                icon: BrainCircuit,
+                color: 'text-emerald-400',
+                bg: 'bg-emerald-500/10',
+                border: 'border-emerald-500/20',
+                title: 'Multi-Layer Analysis',
+                desc: 'AI analyzes bias, emotion, narrative, and propaganda simultaneously.',
+              },
+              {
+                step: '04',
+                icon: Lightbulb,
+                color: 'text-amber-400',
+                bg: 'bg-amber-500/10',
+                border: 'border-amber-500/20',
+                title: 'Explainability Engine',
+                desc: "Highlights key words that influenced the AI's decision.",
+              },
+              {
+                step: '05',
+                icon: GitMerge,
+                color: 'text-pink-400',
+                bg: 'bg-pink-500/10',
+                border: 'border-pink-500/20',
+                title: 'Aggregation Engine',
+                desc: 'Combines all signals into a final credibility and risk score.',
+              },
+              {
+                step: '06',
+                icon: Trophy,
+                color: 'text-orange-400',
+                bg: 'bg-orange-500/10',
+                border: 'border-orange-500/20',
+                title: 'Final Result',
+                desc: 'Displays REAL/FAKE prediction with confidence and insights.',
+              },
+            ].map(({ step, icon: Icon, color, bg, border, title, desc }, i) => (
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
+                className={`relative bg-[#131929] border ${border} rounded-2xl p-6 overflow-hidden`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-12 h-12 ${bg} rounded-xl flex items-center justify-center shrink-0`}>
+                    <Icon className={`w-6 h-6 ${color}`} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Step {step}</span>
+                    <h3 className="text-white font-semibold mt-0.5 mb-1.5">{title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+                <div className="absolute top-4 right-5 text-5xl font-black text-white/[0.04] select-none leading-none">
+                  {step}
+                </div>
               </motion.div>
             ))}
           </div>
