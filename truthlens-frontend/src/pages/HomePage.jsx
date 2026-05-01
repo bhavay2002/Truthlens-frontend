@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BarChart2, FileText, ArrowRight, CheckCircle, AlertCircle, Info, Layers, ShieldCheck, Eye, Flame, Megaphone, BookOpen, Star, Type, Cpu, BrainCircuit, Lightbulb, GitMerge, Trophy, TrendingUp, Zap, Shield } from 'lucide-react';
 import InputForm from '../components/InputForm';
@@ -83,6 +84,15 @@ function predictionColor(p) {
 
 export default function HomePage({ onSubmit, loading, health, error, analyzeResult, onViewDashboard }) {
   const isHeuristic = health && health.model_files_complete === false;
+  const [submittedText, setSubmittedText] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleSubmit = async (text, mode) => {
+    setSubmittedText(text);
+    setShowResult(false);
+    await onSubmit(text, mode);
+    setShowResult(true);
+  };
 
   const scrollToAnalyze = () => {
     document.getElementById('analyze')?.scrollIntoView({ behavior: 'smooth' });
@@ -340,12 +350,12 @@ export default function HomePage({ onSubmit, loading, health, error, analyzeResu
           )}
 
           <div className="bg-[#131929] border border-white/10 rounded-2xl p-5">
-            <InputForm onSubmit={onSubmit} loading={loading} />
+            <InputForm onSubmit={handleSubmit} loading={loading} />
           </div>
 
           {/* ── Inline Result Card ──────────────────────────────────────── */}
           <AnimatePresence>
-            {analyzeResult && (
+            {showResult && analyzeResult && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -371,9 +381,12 @@ export default function HomePage({ onSubmit, loading, health, error, analyzeResu
                     return (
                       <>
                         <div className="flex items-start justify-between gap-3">
-                          <p className="text-white font-semibold text-sm leading-snug flex-1 line-clamp-2">
-                            Assessment result for your text
-                          </p>
+                          <div
+                            className="flex-1 max-h-16 overflow-y-auto text-gray-300 text-xs leading-relaxed pr-2 scrollbar-thin"
+                            style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent' }}
+                          >
+                            {submittedText}
+                          </div>
                           <div className={`shrink-0 ${badge} rounded-lg px-3 py-2 text-center`}>
                             <div className="text-xs opacity-75 mb-0.5">Assessment</div>
                             <div className="text-sm font-bold leading-tight">{label}</div>
