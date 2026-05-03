@@ -8,15 +8,21 @@ app.use(express.json());
 
 const PORT = Number(process.env.PORT ?? 3000);
 const MODEL_API = process.env.MODEL_API ?? null;
+const GEMINI_API_KEY = process.env.AI_INTEGRATIONS_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY ?? null;
+const GEMINI_BASE_URL = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL ?? process.env.GEMINI_BASE_URL ?? null;
 const REQUEST_TIMEOUT = 30_000;
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
-  httpOptions: {
-    apiVersion: '',
-    baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL,
-  },
-});
+const ai = GEMINI_API_KEY
+  ? new GoogleGenAI({
+      apiKey: GEMINI_API_KEY,
+      httpOptions: GEMINI_BASE_URL
+        ? {
+            apiVersion: '',
+            baseUrl: GEMINI_BASE_URL,
+          }
+        : undefined,
+    })
+  : null;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -251,6 +257,7 @@ Return ONLY a valid JSON object matching this exact schema:
 // ─── Gemini caller ─────────────────────────────────────────────────────────────
 
 async function callGemini(prompt) {
+  if (!ai) throw new Error('Gemini not configured');
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -324,7 +331,7 @@ app.get('/health', async (_req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     primary_model: primaryStatus,
-    fallback: 'gemini-2.5-flash',
+    fallback: ai ? 'gemini-2.5-flash' : 'unconfigured',
   });
 });
 
@@ -332,5 +339,6 @@ app.get('/health', async (_req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`TruthLens backend running on port ${PORT}`);
-  console.log(`Primary model: ${MODEL_API ?? 'not configured — Gemini fallback only'}`);
+  console.log(`Primary model: ${MODEL_API ?? 'not configured'}`);
+  console.log(`Gemini fallback: ${ai ? 'configured' : 'not configured'}`);
 });
