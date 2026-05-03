@@ -10,7 +10,7 @@ const NAV_LINKS = [
 ];
 
 export default function Header({ health }) {
-  const isHealthy = health?.status === 'healthy';
+  const isHealthy = health?.status === 'healthy' || health?.status === 'online';
   const { pathname } = useLocation();
 
   return (

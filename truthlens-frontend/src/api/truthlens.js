@@ -1,9 +1,10 @@
 const BASE = import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_API_URL ?? '';
+const apiUrl = (path) => (BASE ? `${BASE}${path}` : path);
 
 const post = async (path, text) => {
   let res;
   try {
-    res = await fetch(`${BASE}${path}`, {
+    res = await fetch(apiUrl(path), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text }),
@@ -36,7 +37,7 @@ const post = async (path, text) => {
 
 const getHealth = async () => {
   try {
-    const res = await fetch(`${BASE}/health`);
+    const res = await fetch(apiUrl('/health'));
     return res.json();
   } catch {
     return { status: 'offline' };
