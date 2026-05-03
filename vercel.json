@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd truthlens-frontend && npm install && npm run build",
+  "outputDirectory": "truthlens-frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
