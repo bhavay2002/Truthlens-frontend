@@ -1,5 +1,9 @@
 const BASE = import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_API_URL ?? '';
-const apiUrl = (path) => (BASE ? `${BASE}${path}` : path);
+const apiUrl = (path) => {
+  if (BASE) return `${BASE}${path}`;
+  if (import.meta.env.PROD) return path;
+  return path;
+};
 
 const post = async (path, text) => {
   let res;
