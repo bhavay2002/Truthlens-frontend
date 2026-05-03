@@ -257,7 +257,11 @@ Return ONLY a valid JSON object matching this exact schema:
 // ─── Gemini caller ─────────────────────────────────────────────────────────────
 
 async function callGemini(prompt) {
-  if (!ai) throw new Error('Gemini not configured');
+  if (!ai) {
+    const error = new Error('Gemini not configured');
+    error.code = 'GEMINI_NOT_CONFIGURED';
+    throw error;
+  }
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -306,7 +310,9 @@ function makeHandler(modelPath, geminiPromptFn) {
     return res.status(500).json({
       detail: 'Analysis failed. Both the primary model and the Gemini fallback encountered errors.',
       primary_error: primaryResult.reason?.message,
-      gemini_error: geminiResult.reason?.message,
+      gemini_error: geminiResult.reason?.code === 'GEMINI_NOT_CONFIGURED'
+        ? 'Gemini not configured on this deployment'
+        : geminiResult.reason?.message,
     });
   };
 }
