@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT ?? 3000;
+const PORT = Number(process.env.PORT ?? 3000);
 const MODEL_API = process.env.MODEL_API ?? null;
 const REQUEST_TIMEOUT = 30_000;
 
